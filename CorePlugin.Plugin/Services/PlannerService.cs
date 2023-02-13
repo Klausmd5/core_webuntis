@@ -14,17 +14,18 @@ public class PlannerService
         _webuntisService = webuntisService;
     }
 
-    public IEnumerable<GapDto> GetGaps(List<int> teacherIds, List<int> studentIds, DateTime from,
-        DateTime to, int? startToleranceMinutes, int? endToleranceMinutes, int? minDurationMinutes)
+    public IEnumerable<GapDto> FindGaps(FindGapsModel findGapsModel)
     {
         var gaps = new List<GapDto>();
 
-        var teacherTimetableEntries = teacherIds.ToDictionary(x => x, x => _webuntisService.GetTeacherTimetable(x, from, to));
-        var studentTimetableEntries = studentIds.ToDictionary(x => x, x => _webuntisService.GetStudentTimetable(x, from, to));
+        var teacherTimetableEntries = findGapsModel.TeacherIds.Select(x => x.Id)
+            .ToDictionary(x => x, x => _webuntisService.GetTeacherTimetable(x, findGapsModel.From, findGapsModel.To));
+        var studentTimetableEntries = findGapsModel.StudentIds.Select(x => x.Id)
+            .ToDictionary(x => x, x => _webuntisService.GetStudentTimetable(x, findGapsModel.From, findGapsModel.To));
         var allTimetableEntries = teacherTimetableEntries.ToDictionary(x => $"T{x.Key}", x => x.Value)
             .Concat(studentTimetableEntries.ToDictionary(x => $"S{x.Key}", x => x.Value));
 
-        var edges = GetEdges(allTimetableEntries, startToleranceMinutes, endToleranceMinutes, minDurationMinutes)
+        var edges = GetEdges(allTimetableEntries, findGapsModel.StartToleranceMinutes, findGapsModel.EndToleranceMinutes, findGapsModel.MinDurationMinutes)
             .ToList();
 
         for (var i = 0; i < edges.Count - 1;)
@@ -52,7 +53,13 @@ public class PlannerService
             });
         }
 
-        return gaps.OrderByDescending(x => x.FreeTeacherIds.Count + x.FreeStudentIds.Count);
+        var forcedTeacherIds = findGapsModel.TeacherIds.Where(x => x.Forced)
+            .Select(x => x.Id);
+        var forcedStudentIds = findGapsModel.StudentIds.Where(x => x.Forced)
+            .Select(x => x.Id);
+
+        return gaps.Where(x => forcedTeacherIds.All(y => x.FreeTeacherIds.Contains(y)) && forcedStudentIds.All(y => x.FreeStudentIds.Contains(y)))
+            .OrderByDescending(x => x.FreeTeacherIds.Count + x.FreeStudentIds.Count);
     }
 
     private static IEnumerable<DateTime> GetEdges(IEnumerable<KeyValuePair<string, IEnumerable<WebUntisTimetableEntry>>> timetableEntries,
@@ -77,13 +84,13 @@ public class PlannerService
             var start = day.Value.Max(x => x.Value.Min(y => y.Start));
             var end = day.Value.Min(x => x.Value.Max(y => y.End));
 
-            if (startToleranceMinutes != null && startToleranceMinutes >= (minDurationMinutes ?? 0))
+            if (startToleranceMinutes != 0 && startToleranceMinutes >= (minDurationMinutes ?? 0))
             {
                 edges.Add(start);
                 edges.Add(start.AddMinutes(startToleranceMinutes.Value * -1));
             }
 
-            if (endToleranceMinutes != null && endToleranceMinutes >= (minDurationMinutes ?? 0))
+            if (endToleranceMinutes != 0 && endToleranceMinutes >= (minDurationMinutes ?? 0))
             {
                 edges.Add(end);
                 edges.Add(end.AddMinutes(endToleranceMinutes.Value));
@@ -97,7 +104,7 @@ public class PlannerService
                 foreach (var entry in timetableEntriesByDay.Value)
                 {
                     if (!edges.Any(x => IsSame(x, entry.Start))
-                        && earliestStart.CompareTo(entry.Start) < 0
+                        && earliestStart.CompareTo(entry.Start) < 0 && latestEnd.CompareTo(entry.Start) > 0
                         && !IsSame(earliestStart, entry.Start, minDurationMinutes ?? 0)
                         && timetableEntriesByDay.Value.All(x => !IsSame(x.End, entry.Start, minDurationMinutes ?? 0)))
                     {
@@ -105,7 +112,7 @@ public class PlannerService
                     }
 
                     if (!edges.Any(x => IsSame(x, entry.End))
-                        && latestEnd.CompareTo(entry.End) > 0 && !IsSame(latestEnd, entry.End, minDurationMinutes ?? 0)
+                        && earliestStart.CompareTo(entry.End) < 0 && latestEnd.CompareTo(entry.End) > 0 && !IsSame(latestEnd, entry.End, minDurationMinutes ?? 0)
                         && timetableEntriesByDay.Value.All(x => !IsSame(x.Start, entry.End, minDurationMinutes ?? 0)))
                     {
                         edges.Add(entry.End);

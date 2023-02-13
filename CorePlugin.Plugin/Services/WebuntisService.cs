@@ -65,7 +65,6 @@ public class WebuntisService
             },
             2 => new[]
             {
-                new WebUntisTimetableEntry { Start = DateTime.Now, End = DateTime.Now.Add(TimeSpan.FromHours(3)) },
                 new WebUntisTimetableEntry
                 {
                     Start = DateTime.Now.Add(TimeSpan.FromHours(3)),

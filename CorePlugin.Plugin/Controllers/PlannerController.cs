@@ -1,4 +1,5 @@
-﻿using CorePlugin.Plugin.Services;
+﻿using CorePlugin.Plugin.Dtos;
+using CorePlugin.Plugin.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CorePlugin.Plugin.Controllers;
@@ -16,10 +17,9 @@ public class PlannerController : ControllerBase
         _plannerService = plannerService;
     }
 
-    [HttpGet]
-    public void Test(int? startToleranceMinutes, int? endToleranceMinutes, int? minDuration)
+    [HttpPost]
+    public IEnumerable<GapDto> FindGaps([FromBody] FindGapsModel findGapsModel)
     {
-        _plannerService.GetGaps(new List<int> { 1 }, new List<int> { 1, 2 }, DateTime.Now,
-            DateTime.Now.AddDays(2), startToleranceMinutes, endToleranceMinutes, minDuration);
+        return _plannerService.FindGaps(findGapsModel);
     }
 }
