@@ -17,7 +17,7 @@ public class WebuntisController
         _webuntisService = webuntisService;
     }
 
-    [HttpGet]
+    [HttpGet("Teachers")]
     public List<TeacherDto> GetTeachers()
     {
         return _webuntisService.GetTeachers()
@@ -30,7 +30,7 @@ public class WebuntisController
             .ToList();
     }
 
-    [HttpGet]
+    [HttpGet("Students")]
     public List<StudentDto> GetStudents()
     {
         return _webuntisService.GetStudents()

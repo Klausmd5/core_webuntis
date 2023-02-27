@@ -17,19 +17,19 @@ public class PlannerController : ControllerBase
         _plannerService = plannerService;
     }
 
-    [HttpPost]
+    [HttpPost("Gaps")]
     public IEnumerable<GapDto> FindGaps([FromBody] FindGapsModel findGapsModel)
     {
         return _plannerService.FindGaps(findGapsModel);
     }
 
-    [HttpGet]
+    [HttpGet("Meetings")]
     public IEnumerable<MeetingDto> GetMeetings()
     {
         return _plannerService.GetMeetings();
     }
 
-    [HttpPost]
+    [HttpPost("Meeting")]
     public void CreateMeeting([FromBody] MeetingModel meetingModel)
     {
         _plannerService.PlanMeeting(meetingModel);
