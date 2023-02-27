@@ -22,4 +22,16 @@ public class PlannerController : ControllerBase
     {
         return _plannerService.FindGaps(findGapsModel);
     }
+
+    [HttpGet]
+    public IEnumerable<MeetingDto> GetMeetings()
+    {
+        return _plannerService.GetMeetings();
+    }
+
+    [HttpPost]
+    public void CreateMeeting([FromBody] MeetingModel meetingModel)
+    {
+        _plannerService.PlanMeeting(meetingModel);
+    }
 }

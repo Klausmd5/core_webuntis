@@ -1,16 +1,22 @@
-﻿using CorePlugin.Plugin.Dtos;
+﻿using CorePlugin.DbLib;
+using CorePlugin.Plugin.Dtos;
+using CorePlugin.Plugin.Dtos.Webuntis;
+using Microsoft.EntityFrameworkCore;
 using DateTime = System.DateTime;
 
 namespace CorePlugin.Plugin.Services;
 
 public class PlannerService
 {
+    private readonly PlannerContext _plannerContext;
     private readonly WebuntisService _webuntisService;
 
     public PlannerService(
+        PlannerContext plannerContext,
         WebuntisService webuntisService
     )
     {
+        _plannerContext = plannerContext;
         _webuntisService = webuntisService;
     }
 
@@ -62,19 +68,19 @@ public class PlannerService
             .OrderByDescending(x => x.FreeTeacherIds.Count + x.FreeStudentIds.Count);
     }
 
-    private static IEnumerable<DateTime> GetEdges(IEnumerable<KeyValuePair<string, IEnumerable<WebUntisTimetableEntry>>> timetableEntries,
+    private static IEnumerable<DateTime> GetEdges(IEnumerable<KeyValuePair<string, IEnumerable<TimetableEntry>>> timetableEntries,
         int? startToleranceMinutes, int? endToleranceMinutes, int? minDurationMinutes)
     {
         var edges = new List<DateTime>();
 
-        var days = new Dictionary<DateTime, Dictionary<string, List<WebUntisTimetableEntry>>>();
+        var days = new Dictionary<DateTime, Dictionary<string, List<TimetableEntry>>>();
         foreach (var entries in timetableEntries)
         {
             foreach (var entry in entries.Value)
             {
                 var day = entry.Start.Date;
-                if (!days.ContainsKey(day)) days[day] = new Dictionary<string, List<WebUntisTimetableEntry>>();
-                if (!days[day].ContainsKey(entries.Key)) days[day][entries.Key] = new List<WebUntisTimetableEntry>();
+                if (!days.ContainsKey(day)) days[day] = new Dictionary<string, List<TimetableEntry>>();
+                if (!days[day].ContainsKey(entries.Key)) days[day][entries.Key] = new List<TimetableEntry>();
                 days[day][entries.Key].Add(entry);
             }
         }
@@ -132,5 +138,60 @@ public class PlannerService
     private static bool IsBetween(DateTime value, DateTime start, DateTime end)
     {
         return (int)(value - start).TotalMinutes > 0 && (int)(end - value).TotalMinutes > 0;
+    }
+
+    public IEnumerable<MeetingDto> GetMeetings()
+    {
+        return _plannerContext.Meetings
+            .Include(x => x.Teachers)
+            .Include(x => x.Students)
+            .Select(x => new MeetingDto
+            {
+                Id = x.Id,
+                TeacherIds = x.Teachers
+                    .Select(y => y.TeacherId)
+                    .ToList(),
+                StudentIds = x.Students
+                    .Select(y => y.StudentId)
+                    .ToList(),
+                Subject = x.Subject,
+                Description = x.Description,
+                From = x.From,
+                To = x.To,
+                Location = x.Location,
+            })
+            .ToList();
+    }
+
+    public void PlanMeeting(MeetingModel meetingModel)
+    {
+        var meeting = _plannerContext.Meetings.Add(
+            new Meeting
+            {
+                Subject = meetingModel.Subject,
+                Description = meetingModel.Description,
+                From = meetingModel.From,
+                To = meetingModel.To,
+                Location = meetingModel.Location,
+            }
+        ).Entity;
+
+        _plannerContext.MeetingTeachers.AddRange(
+            meetingModel.TeacherIds
+                .Select(x => new MeetingTeacher
+                {
+                    MeetingId = meeting.Id,
+                    TeacherId = x,
+                })
+        );
+
+        _plannerContext.MeetingStudents.AddRange(
+            meetingModel.StudentIds
+                .Select(x => new MeetingStudent()
+                {
+                    MeetingId = meeting.Id,
+                    StudentId = x,
+                })
+        );
     }
 }

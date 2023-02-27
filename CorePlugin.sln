@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePlugin.BackendDevServer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.AuthLib", "core\Core.AuthLib\Core.AuthLib.csproj", "{8469F4E6-6944-4B82-BA18-357B969FD80F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorePlugin.DbLib", "CorePlugin.DbLib\CorePlugin.DbLib.csproj", "{3C0831CC-0235-4819-8A29-2A986510E2EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{8469F4E6-6944-4B82-BA18-357B969FD80F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8469F4E6-6944-4B82-BA18-357B969FD80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8469F4E6-6944-4B82-BA18-357B969FD80F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C0831CC-0235-4819-8A29-2A986510E2EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C0831CC-0235-4819-8A29-2A986510E2EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C0831CC-0235-4819-8A29-2A986510E2EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C0831CC-0235-4819-8A29-2A986510E2EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
