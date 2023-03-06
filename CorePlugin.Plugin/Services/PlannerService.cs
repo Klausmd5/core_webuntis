@@ -181,6 +181,12 @@ public class PlannerService
             if (students.SingleOrDefault(x => studentId == x.Id) == null)
                 throw new StudentNotFoundException(studentId);
         }
+        
+        if (meetingModel.To <= meetingModel.From)
+            throw new BadDateException();
+        
+        if (meetingModel.TeacherIds.Count() + meetingModel.StudentIds.Count() < 2)
+            throw new NotEnoughParticipants();
 
         var meeting = _plannerContext.Meetings.Add(
             new Meeting

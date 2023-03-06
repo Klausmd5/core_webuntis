@@ -29,6 +29,10 @@ public class PlannerController : ControllerBase
         {
             return NotFound(e.Message);
         }
+        catch (BadRequestException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpGet("Meetings")]
