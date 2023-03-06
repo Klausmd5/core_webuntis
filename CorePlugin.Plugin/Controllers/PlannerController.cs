@@ -25,9 +25,9 @@ public class PlannerController : ControllerBase
         {
             return Ok(_plannerService.FindGaps(findGapsModel));
         }
-        catch (NotFoundException)
+        catch (NotFoundException e)
         {
-            return NotFound();
+            return NotFound(e.Message);
         }
     }
 

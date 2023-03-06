@@ -167,11 +167,20 @@ public class PlannerService
 
     public void PlanMeeting(MeetingModel meetingModel)
     {
-        var teachers = _webuntisService.GetTeachers();
-        var students = _webuntisService.GetStudents();
+        var teachers = _webuntisService.GetTeachers().ToArray();
+        var students = _webuntisService.GetStudents().ToArray();
 
-        if (meetingModel.TeacherIds.Any(x => teachers.SingleOrDefault(y => x == y.Id) == null) || meetingModel.StudentIds.Any(x => students.SingleOrDefault(y => x == y.Id) == null))
-            throw new NotFoundException();
+        foreach (var teacherId in meetingModel.TeacherIds)
+        {
+            if (teachers.SingleOrDefault(x => teacherId == x.Id) == null)
+                throw new TeacherNotFoundException(teacherId);
+        }
+
+        foreach (var studentId in meetingModel.StudentIds)
+        {
+            if (students.SingleOrDefault(x => studentId == x.Id) == null)
+                throw new StudentNotFoundException(studentId);
+        }
 
         var meeting = _plannerContext.Meetings.Add(
             new Meeting
