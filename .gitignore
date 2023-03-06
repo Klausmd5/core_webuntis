@@ -1,4 +1,4 @@
-core.sqlite3*
+*.sqlite3*
 
 # GENERATED FILE BELOW
 # Created by https://www.toptal.com/developers/gitignore/api/csharp,visualstudio,visualstudiocode,jetbrains+all,jetbrains+iml,yarn,angular

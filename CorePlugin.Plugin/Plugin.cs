@@ -22,5 +22,12 @@ public class Plugin : ICorePlugin
         builder.Services.AddControllers();
     }
 
-    public void Configure(WebApplication app) => app.MapControllers();
+    public void Configure(WebApplication app)
+    {
+        app.MapControllers();
+
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PlannerContext>();
+        db.Database.EnsureCreated();
+    }
 }

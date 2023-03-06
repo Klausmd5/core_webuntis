@@ -176,6 +176,8 @@ public class PlannerService
             }
         ).Entity;
 
+        _plannerContext.SaveChanges();
+
         _plannerContext.MeetingTeachers.AddRange(
             meetingModel.TeacherIds
                 .Select(x => new MeetingTeacher
@@ -193,5 +195,7 @@ public class PlannerService
                     StudentId = x,
                 })
         );
+
+        _plannerContext.SaveChanges();
     }
 }
