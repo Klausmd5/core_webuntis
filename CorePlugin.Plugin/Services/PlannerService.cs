@@ -1,6 +1,8 @@
 ﻿using CorePlugin.DbLib;
 using CorePlugin.Plugin.Dtos;
 using CorePlugin.Plugin.Dtos.Webuntis;
+using CorePlugin.Plugin.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DateTime = System.DateTime;
 
@@ -165,6 +167,12 @@ public class PlannerService
 
     public void PlanMeeting(MeetingModel meetingModel)
     {
+        var teachers = _webuntisService.GetTeachers();
+        var students = _webuntisService.GetStudents();
+
+        if (meetingModel.TeacherIds.Any(x => teachers.SingleOrDefault(y => x == y.Id) == null) || meetingModel.StudentIds.Any(x => students.SingleOrDefault(y => x == y.Id) == null))
+            throw new NotFoundException();
+
         var meeting = _plannerContext.Meetings.Add(
             new Meeting
             {
@@ -189,7 +197,7 @@ public class PlannerService
 
         _plannerContext.MeetingStudents.AddRange(
             meetingModel.StudentIds
-                .Select(x => new MeetingStudent()
+                .Select(x => new MeetingStudent
                 {
                     MeetingId = meeting.Id,
                     StudentId = x,
