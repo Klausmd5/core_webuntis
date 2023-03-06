@@ -23,7 +23,8 @@ public class PlannerController : ControllerBase
     {
         try
         {
-            return Ok(_plannerService.FindGaps(findGapsModel));
+            var gaps = _plannerService.FindGaps(findGapsModel);
+            return Ok(gaps);
         }
         catch (NotFoundException e)
         {
