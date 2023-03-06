@@ -2,7 +2,7 @@
 
 public class NotEnoughParticipants : NotFoundException
 {
-    public NotEnoughParticipants() : base($"There need to be at least 2 participants")
+    public NotEnoughParticipants() : base($"At least 2 participants are required")
     {
     }
 }
