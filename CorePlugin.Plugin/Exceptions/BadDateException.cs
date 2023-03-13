@@ -1,8 +1,8 @@
 ﻿namespace CorePlugin.Plugin.Exceptions;
 
-public class BadDateException : NotFoundException
+public class BadDateException : BadRequestException
 {
-    public BadDateException() : base($"\"From\" cannot be after \"To\"")
+    public BadDateException() : base($"\"from\" cannot be after \"to\"")
     {
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace CorePlugin.Plugin.Exceptions;
 
-public class NotEnoughParticipants : NotFoundException
+public class NotEnoughParticipants : BadRequestException
 {
-    public NotEnoughParticipants() : base($"At least 2 participants are required")
+    public NotEnoughParticipants() : base($"at least 2 participants are required")
     {
     }
 }

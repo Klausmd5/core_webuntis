@@ -18,7 +18,6 @@ public class Plugin : ICorePlugin
             x.UseSqlite(connectionString);
         });
         builder.Services.AddTransient<PlannerService>();
-        builder.Services.AddTransient<WebuntisService>();
         builder.Services.AddControllers();
     }
 

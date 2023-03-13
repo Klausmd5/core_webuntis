@@ -26,10 +26,6 @@ public class PlannerController : ControllerBase
             var gaps = _plannerService.FindGaps(findGapsModel);
             return Ok(gaps);
         }
-        catch (NotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
         catch (BadRequestException e)
         {
             return BadRequest(e.Message);
@@ -45,7 +41,14 @@ public class PlannerController : ControllerBase
     [HttpPost("Meeting")]
     public ActionResult CreateMeeting([FromBody] MeetingModel meetingModel)
     {
-        _plannerService.PlanMeeting(meetingModel);
-        return Ok();
+        try
+        {
+            _plannerService.PlanMeeting(meetingModel);
+            return Ok();
+        }
+        catch (BadRequestException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }
