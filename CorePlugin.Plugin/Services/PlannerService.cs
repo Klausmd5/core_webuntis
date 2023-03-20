@@ -41,20 +41,20 @@ public class PlannerService
                 var startEdge = edges[i];
 
                 var j = i + 1;
-                DateTime endEdge;
+                var endEdge = edges[j];
 
-                do
+                while (IsSame(startEdge, endEdge, findGapsModel.MinDurationMinutes, false))
                 {
-                    endEdge = edges[j];
                     j++;
-                } while (IsSame(startEdge, endEdge, findGapsModel.MinDurationMinutes, false));
+                    endEdge = edges[j];
+                }
 
                 var freeTeacherIds = teacherTimetableEntries
-                    .Where(x => !x.Value.Any(y => startEdge >= y.Start && startEdge < y.End && endEdge <= y.End && endEdge > y.Start))
+                    .Where(x => x.Value.All(y => !(startEdge >= y.Start && startEdge < y.End && endEdge <= y.End && endEdge > y.Start)))
                     .Select(x => x.Key)
                     .ToList();
                 var freeStudentIds = studentTimetableEntries
-                    .Where(x => !x.Value.Any(y => startEdge >= y.Start && startEdge < y.End && endEdge <= y.End && endEdge > y.Start))
+                    .Where(x => x.Value.All(y => !(startEdge >= y.Start && startEdge < y.End && endEdge <= y.End && endEdge > y.Start)))
                     .Select(x => x.Key)
                     .ToList();
 
@@ -115,11 +115,11 @@ public class PlannerService
 
             foreach (var entry in day.Value.SelectMany(timetableEntriesByDay => timetableEntriesByDay.Value))
             {
-                if (!edges.Any(x => IsSame(x, entry.Start))
+                if (edges.All(x => !IsSame(x, entry.Start))
                     && entry.Start > earliestStart && entry.Start < latestEnd)
                     edges.Add(entry.Start);
 
-                if (!edges.Any(x => IsSame(x, entry.End))
+                if (edges.All(x => !IsSame(x, entry.End))
                     && entry.End > earliestStart && entry.End < latestEnd)
                     edges.Add(entry.End);
             }
@@ -135,8 +135,8 @@ public class PlannerService
     {
         if (inclusive)
             return Math.Abs((int)(dateTime1 - dateTime2).TotalMinutes) <= toleranceMinutes;
-        else
-            return Math.Abs((int)(dateTime1 - dateTime2).TotalMinutes) < toleranceMinutes;
+
+        return Math.Abs((int)(dateTime1 - dateTime2).TotalMinutes) < toleranceMinutes;
     }
 
     public IEnumerable<MeetingDto> GetMeetings()
@@ -165,7 +165,7 @@ public class PlannerService
     public void PlanMeeting(MeetingModel meetingModel)
     {
         if (meetingModel.To <= meetingModel.From)
-            throw new BadDateException();
+            throw new BadDate();
 
         if (meetingModel.TeacherIds.Count() + meetingModel.StudentIds.Count() < 2)
             throw new NotEnoughParticipants();
