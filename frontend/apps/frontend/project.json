@@ -1,4 +1,5 @@
 {
+  "name": "frontend",
   "projectType": "application",
   "generators": {
     "@schematics/angular:component": {
@@ -17,13 +18,8 @@
         "polyfills": "apps/frontend/src/polyfills.ts",
         "tsConfig": "apps/frontend/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/frontend/src/favicon.ico",
-          "apps/frontend/src/assets"
-        ],
-        "styles": [
-          "apps/frontend/src/styles.scss"
-        ],
+        "assets": ["apps/frontend/src/favicon.ico", "apps/frontend/src/assets"],
+        "styles": ["apps/frontend/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -85,13 +81,8 @@
         "tsConfig": "apps/frontend/tsconfig.spec.json",
         "karmaConfig": "apps/frontend/karma.conf.js",
         "inlineStyleLanguage": "scss",
-        "assets": [
-          "apps/frontend/src/favicon.ico",
-          "apps/frontend/src/assets"
-        ],
-        "styles": [
-          "apps/frontend/src/styles.scss"
-        ],
+        "assets": ["apps/frontend/src/favicon.ico", "apps/frontend/src/assets"],
+        "styles": ["apps/frontend/src/styles.scss"],
         "scripts": []
       }
     }

@@ -1,0 +1,19 @@
+{
+  "name": "api-connector",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/api-connector/src",
+  "prefix": "app",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/api-connector/**/*.ts",
+          "libs/api-connector/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

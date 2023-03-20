@@ -34,3 +34,8 @@ Plugins need to implement the `ICorePlugin` Interface of the core project in ord
 ### Frontend
 
 `frontend` contains an empty angular project with tailwindcss already configured.
+
+### Calling secure-backend APIs
+Use the method `sendRequest` of the `api-connector` lib to call any method on the secure-backend which is permitted for your plugin in the `mainframe-config`.
+
+There should be utility services for all APIs in the plugin-template (WIP at the time of writing).
