@@ -1,4 +1,5 @@
 ﻿using CorePlugin.Plugin.Dtos;
+using CorePlugin.Plugin.Exceptions;
 using CorePlugin.Plugin.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +18,37 @@ public class PlannerController : ControllerBase
         _plannerService = plannerService;
     }
 
-    [HttpPost]
-    public IEnumerable<GapDto> FindGaps([FromBody] FindGapsModel findGapsModel)
+    [HttpPost("Gaps")]
+    public ActionResult<IEnumerable<GapDto>> FindGaps([FromBody] FindGapsModel findGapsModel)
     {
-        return _plannerService.FindGaps(findGapsModel);
+        try
+        {
+            var gaps = _plannerService.FindGaps(findGapsModel);
+            return Ok(gaps);
+        }
+        catch (BadRequestException e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpGet("Meetings")]
+    public ActionResult<IEnumerable<MeetingDto>> GetMeetings()
+    {
+        return Ok(_plannerService.GetMeetings());
+    }
+
+    [HttpPost("Meeting")]
+    public ActionResult CreateMeeting([FromBody] MeetingModel meetingModel)
+    {
+        try
+        {
+            _plannerService.PlanMeeting(meetingModel);
+            return Ok();
+        }
+        catch (BadRequestException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }
