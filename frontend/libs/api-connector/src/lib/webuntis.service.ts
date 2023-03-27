@@ -1,10 +1,9 @@
-import {Injectable} from "@angular/core";
-import {MainframeService} from "./mainframe.service";
+import { Injectable } from '@angular/core';
+import { MainframeService } from './mainframe.service';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root',
 })
 export class WebUntisService {
-  constructor(private mainframe: MainframeService) {
-  }
+  constructor(private mainframe: MainframeService) {}
 }
