@@ -39,6 +39,16 @@ export class CalendarComponent implements OnInit {
     start: getMonday(new Date()),
     end: getLastDayOfWeek(new Date()),
   };
+
+  previousWeek() {
+    this.currentWeek.start.setDate(this.currentWeek.start.getDate() - 7);
+    this.currentWeek.end.setDate(this.currentWeek.end.getDate() - 7);
+  }
+
+  nextWeek() {
+    this.currentWeek.start.setDate(this.currentWeek.start.getDate() + 7);
+    this.currentWeek.end.setDate(this.currentWeek.end.getDate() + 7);
+  }
 }
 function getMonday(d: Date) {
   d = new Date(d);
