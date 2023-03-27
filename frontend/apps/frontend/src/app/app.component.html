@@ -1,15 +1,24 @@
 <div class="flex w-full h-full relative">
-  <div class="bg-red-200 p-5 flex-col flex">
+  <div class="bg-red-100 p-5 flex-col flex">
+    <h1>Personenauswahl</h1>
     <input type="text" />
-    <table class="flex-1">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Klasse</th>
+    <table>
+      <thead class="flex bg-red-100">
+        <tr class="flex bg-slate-700 w-full">
+          <th class="w-6"></th>
+          <th class="flex-1 text-left">Name</th>
+          <th class="flex-1 text-left">Klasse</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody>
+        <tr class="flex bg-slate-400 w-full">
+          <td class="w-6"><input type="checkbox" /></td>
+          <td class="flex-1">Name</td>
+          <td class="flex-1">Klasse</td>
+        </tr>
+      </tbody>
     </table>
+    <div class="flex-1"></div>
     <input id="topic" placeholder="Thema" />
     <input value="location" placeholder="Ort" />
     <input value="description" placeholder="Beschreibung" />

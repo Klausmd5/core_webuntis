@@ -1,31 +1,38 @@
-<div class="w-full flex justify-between">
-  <input type="button" value="prev" (click)="previousWeek()" />
-  <h1 class="text-3xl font-bold">
-    {{ currentWeek.start.getDate() }}.
-    {{ currentWeek.start.toLocaleString("default", { month: "long" }) }} -{{
-      currentWeek.end.getDate()
-    }}.
-    {{ currentWeek.end.toLocaleString("default", { month: "long" }) }}
-  </h1>
-  <input type="button" value="next" (click)="nextWeek()" />
+<div class="w-full h-full flex flex-col bg-red-200">
+  <div class="w-full flex justify-between">
+    <input type="button" value="prev" (click)="previousWeek()" />
+    <h1 class="text-3xl font-bold">
+      {{ currentWeek.start.getDate() }}.
+      {{ currentWeek.start.toLocaleString("default", { month: "long" }) }} -{{
+        currentWeek.end.getDate()
+      }}.
+      {{ currentWeek.end.toLocaleString("default", { month: "long" }) }}
+    </h1>
+    <input type="button" value="next" (click)="nextWeek()" />
+  </div>
+
+  <table class="flex-1 flex flex-col">
+    <thead class="w-full flex">
+      <tr class="w-full flex">
+        <th class="w-[100px]">TIME</th>
+        <th class="flex-1 text-left ml-6" *ngFor="let dayname of weekdays">
+          {{ dayname | uppercase }}
+        </th>
+      </tr>
+    </thead>
+    <tbody class="w-full h-full flex flex-col flex-1">
+      <tr class="w-full flex flex-1" *ngFor="let block of hours">
+        <td
+          class="text-left w-[100px] bg-red-400 flex justify-center items-center"
+        >
+          {{ block }}
+        </td>
+        <td
+          class="text-center flex-1 hover:bg-slate-300"
+          *ngFor="let day of weekdays"
+          (click)="blockClicked(block, day)"
+        ></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-<table class="w-full h-full flex flex-col">
-  <thead class="w-full flex">
-    <tr class="w-full flex">
-      <th class="flex-1">time</th>
-      <th class="flex-1" *ngFor="let dayname of weekdays">{{ dayname }}</th>
-    </tr>
-  </thead>
-  <tbody class="w-full flex flex-col flex-1">
-    <tr class="w-full flex flex-1" *ngFor="let block of hours">
-      <td class="text-center w-full">{{ block }}</td>
-      <td class="text-center w-full"></td>
-      <td class="text-center w-full"></td>
-      <td class="text-center w-full"></td>
-      <td class="text-center w-full"></td>
-      <td class="text-center w-full"></td>
-      <td class="text-center w-full"></td>
-      <td class="text-center w-full"></td>
-    </tr>
-  </tbody>
-</table>

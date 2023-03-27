@@ -15,7 +15,15 @@ export class CalendarComponent implements OnInit {
   ngOnInit(): void {
     console.log('as');
   }
-  weekdays = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+  weekdays = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
   hours = [
     '7:50',
     '8:00',
@@ -27,13 +35,6 @@ export class CalendarComponent implements OnInit {
     '15:00',
     '16:00',
     '17:00',
-    '18:00',
-    '19:00',
-    '20:00',
-    '21:00',
-    '22:00',
-    '23:00',
-    '24:00',
   ];
   currentWeek: WeekSpan = {
     start: getMonday(new Date()),
@@ -48,6 +49,10 @@ export class CalendarComponent implements OnInit {
   nextWeek() {
     this.currentWeek.start.setDate(this.currentWeek.start.getDate() + 7);
     this.currentWeek.end.setDate(this.currentWeek.end.getDate() + 7);
+  }
+
+  blockClicked(weekdayId: string, hourId: string) {
+    console.log(weekdayId, hourId);
   }
 }
 function getMonday(d: Date) {
