@@ -1,0 +1,28 @@
+<div class="w-full flex justify-between">
+  <input type="button" value="prev" />
+  <h1>
+    {{ currentWeek.start.getDate() }}. {{ currentWeek.start.getMonth() }} -
+    {{ currentWeek.end.getDate() }}. {{ currentWeek.start.getMonth() }}
+  </h1>
+  <input type="button" value="next" />
+</div>
+<table class="w-full h-full flex flex-col">
+  <thead class="w-full flex">
+    <tr class="w-full flex">
+      <th class="flex-1">time</th>
+      <th class="flex-1" *ngFor="let dayname of weekdays">{{ dayname }}</th>
+    </tr>
+  </thead>
+  <tbody class="w-full flex flex-col flex-1">
+    <tr class="w-full flex flex-1" *ngFor="let block of hours">
+      <td class="text-center w-full">{{ block }}</td>
+      <td class="text-center w-full"></td>
+      <td class="text-center w-full"></td>
+      <td class="text-center w-full"></td>
+      <td class="text-center w-full"></td>
+      <td class="text-center w-full"></td>
+      <td class="text-center w-full"></td>
+      <td class="text-center w-full"></td>
+    </tr>
+  </tbody>
+</table>
