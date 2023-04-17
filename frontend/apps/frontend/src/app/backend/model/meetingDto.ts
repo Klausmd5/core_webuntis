@@ -11,7 +11,14 @@
  */
 
 
-export interface SampleDto { 
-    description: string;
+export interface MeetingDto { 
+    id?: number;
+    subject?: string | null;
+    description?: string | null;
+    from?: string;
+    to?: string;
+    location?: string | null;
+    teacherIds?: Array<number> | null;
+    studentIds?: Array<number> | null;
 }
 

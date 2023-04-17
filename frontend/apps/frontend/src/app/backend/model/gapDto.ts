@@ -11,7 +11,10 @@
  */
 
 
-export interface SampleDto { 
-    description: string;
+export interface GapDto { 
+    start?: string;
+    end?: string;
+    freeTeacherIds?: Array<number> | null;
+    freeStudentIds?: Array<number> | null;
 }
 

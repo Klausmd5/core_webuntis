@@ -11,7 +11,8 @@
  */
 
 
-export interface SampleDto { 
-    description: string;
+export interface FindGapsModelTimetableEntry { 
+    start?: string;
+    end?: string;
 }
 

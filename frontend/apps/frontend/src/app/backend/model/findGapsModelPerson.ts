@@ -9,9 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { FindGapsModelTimetableEntry } from './findGapsModelTimetableEntry';
 
 
-export interface SampleDto { 
-    description: string;
+export interface FindGapsModelPerson { 
+    id?: number;
+    timetableEntries?: Array<FindGapsModelTimetableEntry> | null;
 }
 
