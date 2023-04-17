@@ -1,15 +1,34 @@
-﻿import { NgModule } from '@angular/core';
+﻿import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { CalendarComponent } from './calendar/calendar.component';
-// import { CoreUiLibModule } from '@htl-grieskirchen-core/ngx-core-ui/projects/core-ui-lib/src/lib/core-ui-lib.module';
+import {ApiModule, Configuration} from './backend';
+import {HttpClientModule} from '@angular/common/http';
+import {ConfigurationService} from "./core/configuration.service";
+
+export function initConfig(configService: ConfigurationService): () => Promise<void> {
+  return async () => {
+    await configService.init();
+  };
+}
 
 @NgModule({
-  declarations: [AppComponent, CalendarComponent],
-  imports: [BrowserModule],
-  // use environment.backend as reference to the backend URL
-  providers: [],
+  declarations: [AppComponent],
+  imports: [BrowserModule, ApiModule, HttpClientModule],
+  providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initConfig,
+      deps: [ConfigurationService],
+      multi: true
+    },
+    {
+      provide: Configuration,
+      useFactory: (configService: ConfigurationService) => configService.getConfig(),
+      deps: [ConfigurationService],
+      multi: false
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
